@@ -1,3 +1,4 @@
+import { env } from "../config.js";
 import dayjs from "dayjs";
 
 export class ApiSedapal {
@@ -6,7 +7,7 @@ export class ApiSedapal {
     PASSWORD = "OCV0109";
 
     constructor(codigo) {
-        this.codigo = process.env.SEDAPAL_CODIGO_CLIENTE;
+        this.codigo = env.SEDAPAL_CODIGO_CLIENTE;
         this.jwt = undefined;
     }
 
@@ -19,12 +20,13 @@ export class ApiSedapal {
             const data = await request.json()
             this.jwt = data?.bRESP.token
         }
+
+        console.error("Error al iniciar sesión en Sedapal:", request.status)
     }
 
     async obtenerRecibo(mes, anio) {        
         await this.login()
         if (!this.jwt) {
-            console.log("Error al iniciar sesión en Sedapal")
             return
         }
         const request = await fetch(this.BASE_URL + "/recibos/lista-recibos-deudas-nis", {
@@ -53,6 +55,8 @@ export class ApiSedapal {
                     return await this.descargarRecibo(recibos[reciboIndex])
                 }
             }
+        } else {
+            console.error("Error al obtener recibo de Sedapal:", request.status)
         }
     }
 
@@ -73,6 +77,8 @@ export class ApiSedapal {
         if (request.ok) {
             return response?.bRESP
         }
+
+        console.error("Error al descargar recibo de Sedapal:", request.status)
     }
 }
 
