@@ -23,8 +23,8 @@ export class ApiGemini {
             montoAnterior: z.number("Monto anterior facturado"),
         })
 
-        const interaction = await this.#client.interactions.create({
-            model: this.#modelo,
+        const interaction = await this.client.interactions.create({
+            model: this.modelo,
             input: [
                 {type: "text", text: PROMPT},
                 {
