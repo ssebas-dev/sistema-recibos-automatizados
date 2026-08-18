@@ -2,9 +2,9 @@ export class ApiCalidda {
     BASEURL = 'https://generadorrecibos.calidda.com.pe/Back/api'
     CAPTCHA = ''
 
-    constructor(codigo, dni) {
-        this.cliente = codigo
-        this.dni = dni
+    constructor() {
+        this.cliente = process.env.CALIDDA_CODIGO_CLIENTE
+        this.dni = process.env.CALIDDA_DNI_CLIENTE
     }
 
     async obtenerRecibo(mes, anio) {
@@ -16,7 +16,7 @@ export class ApiCalidda {
             "year": anio,
             "captcha": this.CAPTCHA
         }
-        
+
         const response = await fetch(this.BASEURL + "/ReceiptView/GetPdfForRecibos", {
             method: 'POST', 
             headers: {
@@ -27,7 +27,8 @@ export class ApiCalidda {
 
         if (response.ok) {
             const data = await response.json()
-            if (data.valid) {     
+            if (data.valid) {
+                console.log("- Recibo de CALIDDA obtenido correctamente")
                 return data.data
             }
         }
