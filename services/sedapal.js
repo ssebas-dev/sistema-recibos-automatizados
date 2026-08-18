@@ -6,7 +6,7 @@ export class ApiSedapal {
     PASSWORD = "OCV0109";
 
     constructor(codigo) {
-        this.codigo = codigo;
+        this.codigo = process.env.SEDAPAL_CODIGO_CLIENTE;
         this.jwt = undefined;
     }
 
