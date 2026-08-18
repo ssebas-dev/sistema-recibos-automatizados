@@ -1,0 +1,27 @@
+{
+  "name": "sistema-recibos-automatizados",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "^11.3.0",
+      "onFail": "download"
+    }
+  },
+  "type": "module",
+  "dependencies": {
+    "@google/genai": "^2.17.1",
+    "dayjs": "^1.11.21",
+    "node-cron": "^4.6.0",
+    "postgres": "^3.4.9",
+    "zod": "^4.4.3"
+  }
+}
