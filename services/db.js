@@ -1,8 +1,9 @@
 import postgres from 'postgres';
+import { env } from '../config.js';
 
 export class Db {
     constructor() {
-        this.sql = postgres(process.env.DATABASE_URL);
+        this.sql = postgres(env.DATABASE_URL);
     }
 
     async agregarRecibo(recibo, servicio, periodo) {
@@ -16,7 +17,7 @@ export class Db {
 
     async obtenerRecibosAVencer() {
         const result = await this.sql`
-            SELECT * FROM recibos WHERE nVencimiento = FALSE;
+            SELECT * FROM recibos WHERE nVencimiento = FALSE AND fVencimiento <= NOW() + INTERVAL '3 days';
         `;
         return result;
     }
