@@ -16,7 +16,11 @@ Con este sistema, la consulta se realiza de forma recurrente y automática apena
 
 ## 🚀 Características Principales
 
-* ⏰ **Ejecución Programada (Cron):** Monitoreo diario automático mediante `node-cron`.
+* 🌐 **Servidor Web & API para la Nube (Render):**
+  * Servidor Express (`src/app.js`) con endpoint protegido `POST /procesar-recibos`.
+  * Integrable con disparadores externos gratuitos (como **cron-job.org** o **GitHub Actions**) para evitar costos de instancias 24/7 en planes gratuitos de Render.
+  * Middleware de autenticación mediante cabecera `Authorization: Bearer <CRON_SECRET>` o `x-api-key`.
+* ⏰ **Ejecución Local Programada:** Opción de monitoreo diario local mediante `node-cron` (`main.js`).
 * 🔌 **Integración Directa con Proveedores:**
   * **Cálidda:** Consulta y descarga directa de recibos en formato PDF/Base64.
   * **Sedapal:** Autenticación y consulta en la oficina virtual para obtener el último recibo emitido.
@@ -36,6 +40,7 @@ Con este sistema, la consulta se realiza de forma recurrente y automática apena
 ## 🏗️ Arquitectura y Tecnologías
 
 * **Entorno de Ejecución:** [Node.js](https://nodejs.org/) (ES Modules)
+* **Framework Web:** [Express.js](https://expressjs.com/)
 * **Gestor de Paquetes:** [pnpm](https://pnpm.io/)
 * **Base de Datos:** [PostgreSQL](https://www.postgresql.org/) (usando el driver `postgres`)
 * **Inteligencia Artificial:** Google Gemini API (`@google/genai`)
@@ -56,9 +61,11 @@ Con este sistema, la consulta se realiza de forma recurrente y automática apena
 │   ├── google-ai.js     # Extracción estructurada con Gemini AI
 │   ├── sedapal.js       # Cliente API y autenticación para Sedapal
 │   └── telegram.js      # Envío de mensajes y PDFs vía Telegram Bot
+├── src/
+│   └── app.js           # Servidor Express con endpoint protegido para Render
 ├── .env.example         # Plantilla de variables de entorno requeridas
 ├── config.js            # Validación y carga centralizada del entorno (Zod)
-├── main.js              # Punto de entrada principal y configuración del Cron
+├── main.js              # Punto de entrada para ejecución local con Cron
 ├── LICENSE              # Licencia MIT
 └── package.json         # Dependencias y scripts
 ```
@@ -97,15 +104,31 @@ GEMINI_MODEL=gemini-3.6-flash
 SEDAPAL_CODIGO_CLIENTE=tu_codigo_nis
 CALIDDA_CODIGO_CLIENTE=tu_codigo_cliente
 CALIDDA_DNI_CLIENTE=tu_dni
+
+# Seguridad de Endpoints (Render / Cron externo)
+CRON_SECRET=tu_clave_secreta_generada_aqui
 ```
 
-### 3. Ejecutar el Proyecto:
-```bash
-# Con Node.js 20.6+ soportando --env-file nativo:
-node --env-file=.env main.js
+---
 
-# O para ejecución de prueba directa del job:
-node --env-file=.env -e "import('./jobs/main.js').then(m => m.default())"
+## 🚀 Modos de Ejecución
+
+### Opción A: Modo API / Servidor Web (Recomendado para Render)
+Inicia el servidor Express que expone el endpoint protegido:
+```bash
+node --env-file=.env src/app.js
+```
+
+Para disparar el procesamiento manualmente o desde un cron externo (como [cron-job.org](https://cron-job.org)):
+```bash
+curl -X POST http://localhost:3000/procesar-recibos \
+     -H "Authorization: Bearer TU_CRON_SECRET"
+```
+
+### Opción B: Modo Cron Local (Standalone)
+Para dejar corriendo el script en una máquina local o servidor dedicado 24/7:
+```bash
+node --env-file=.env main.js
 ```
 
 ---
