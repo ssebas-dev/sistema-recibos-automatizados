@@ -5,7 +5,7 @@ import * as z from "zod"
 
 export class ApiGemini {
     constructor() {
-        this.modelo = "gemini-3.6-flash"
+        this.modelo = process.env.GEMINI_MODEL || 'gemini-3.6-flash'
     }
     client = new GoogleGenAI({
         apiKey: process.env.GEMINI_API_KEY
