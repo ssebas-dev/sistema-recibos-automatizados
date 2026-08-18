@@ -1,3 +1,4 @@
+import { env } from "../config.js"
 import fs from "node:fs"
 import dayjs from "dayjs"
 
@@ -5,8 +6,8 @@ export class ApiTelegram {
     BASEURL="https://api.telegram.org/bot"
     
     constructor() {
-        this.token = process.env.TELEGRAM_BOT_TOKEN 
-        this.chat_id = process.env.TELEGRAM_CHAT_ID
+        this.token = env.TELEGRAM_BOT_TOKEN 
+        this.chat_id = env.TELEGRAM_CHAT_ID
     }
 
     async enviarDocumento(base64, recibo, servicio) {
@@ -71,7 +72,11 @@ export class ApiTelegram {
 
         if (response.ok) {
             console.log(`${servicio} notificado!`)
+            return true
         }
 
+        console.error("Error al enviar notificación de vencimiento:", request.status)
+
+        return false
     }
 }
