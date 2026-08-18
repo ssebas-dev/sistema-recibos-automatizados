@@ -13,7 +13,9 @@ const envSchema = z.object({
     SEDAPAL_CODIGO_CLIENTE: z.string().min(1, "SEDAPAL_CODIGO_CLIENTE is requerido"),
 
     CALIDDA_CODIGO_CLIENTE : z.string().min(1, "CALIDDA_CODIGO_CLIENTE is requerido"),
-    CALIDDA_DNI_CLIENTE: z.string().min(1, "CALIDDA_DNI_CLIENTE is requerido")
+    CALIDDA_DNI_CLIENTE: z.string().min(1, "CALIDDA_DNI_CLIENTE is requerido"),
+
+    CRON_SECRET: z.string().min(1, "CRON_SECRET is requerido")
 })
 
 
